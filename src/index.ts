@@ -1,4 +1,4 @@
-import 'isomorphic-fetch';
+import fetch from 'omni-fetch';
 
 function createUrl(url: string, args: any[]): [string, number] {
   let i = 0;
