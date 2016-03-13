@@ -1,3 +1,5 @@
 declare module 'omni-fetch' {
-  export default fetch;
+  import {RequestOptions} from 'http';
+  import {RequestInit, Response} from 'isomorphic-fetch';
+  export default function fetch(url: string, options?: RequestOptions | RequestInit): Promise<Response>;
 }
