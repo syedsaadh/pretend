@@ -6,7 +6,8 @@
   "files": [
     "dist",
     "index.d.ts",
-    "src"
+    "src",
+    "typings/isomorphic-fetch.d.ts"
   ],
   "scripts": {
     "clean": "rimraf dist",
