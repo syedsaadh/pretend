@@ -80,4 +80,27 @@ describe('Pretend', () => {
     assert.isTrue(decoderCalled, 'The decoder should be called');
     assert.equal(text, 'some-string');
   });
+
+  it('should use basic auth if configured', async () => {
+    /* tslint:disable */
+    class Api {
+      @Get('/')
+      async get() {};
+    }
+    /* tslint:enable */
+    nock('http://host:port/', {
+        reqheaders: {
+          Authorization: 'Basic QWxhZGRpbjpPcGVuU2VzYW1l'
+        }
+      })
+      .get('/')
+      .reply(200, '{}');
+
+    const api = Pretend.builder()
+      .basicAuthentication('Aladdin', 'OpenSesame')
+      .target(Api, 'http://host:port');
+    const repsponse = await api.get();
+
+    assert.deepEqual(repsponse, {});
+  });
 });

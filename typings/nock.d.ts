@@ -1,15 +1,19 @@
 declare module 'nock' {
   interface Nock {
-    get(path: string): Nock;
-    post(path: string, body?: any): Nock;
-    put(path: string): Nock;
-    delete(path: string): Nock;
+    get(path: string): this;
+    post(path: string, body?: any): this;
+    put(path: string): this;
+    delete(path: string): this;
     reply(status: number, data?: any): any;
     replyWithError(data: any): any;
   }
 
   interface NockFunction {
-    (baseUrl: string): Nock;
+    (baseUrl: string, options ?: {
+      reqheaders?: {
+        [name: string]: string;
+      }
+    }): Nock;
   }
   const nock: NockFunction;
   export = nock;

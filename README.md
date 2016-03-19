@@ -14,6 +14,8 @@ A decorator based http webservice client build with typescript (inspired bei fei
 
 * Handle REST based webservices
 * Configure a decoder (defaults to JSON)
+* Request interceptors
+* Basic authentication
 
 # Usage
 
@@ -65,6 +67,26 @@ call();
   const client = Pretend
                   .builder()
                   .decoder(Pretend.TextDecoder)
+                  .target(Test, 'http://host:port/');
+```
+
+```js
+  // Configure basic authentication
+  const client = Pretend
+                  .builder()
+                  .basicAuthentication('user', 'pass')
+                  .target(Test, 'http://host:port/');
+```
+
+
+```js
+  // Configure a request interceptor
+  const client = Pretend
+                  .builder()
+                  .requestInterceptor((request) => {
+                    request.options.headers['X-Custom-Header'] = 'value';
+                    return request;
+                  })
                   .target(Test, 'http://host:port/');
 ```
 
