@@ -1,3 +1,13 @@
+<a name="0.2.1"></a>
+## [0.2.1](https://github.com/knisterpeter/pretend/compare/v0.2.0...v0.2.1) (2016-03-19)
+
+
+### Bug Fixes
+
+* Fix packaging typings ([45dcf18](https://github.com/knisterpeter/pretend/commit/45dcf18))
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/knisterpeter/pretend/compare/v0.1.0...v0.2.0) (2016-03-19)
 
