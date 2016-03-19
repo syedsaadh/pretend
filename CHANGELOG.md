@@ -1,3 +1,13 @@
+<a name="0.1.0"></a>
+# [0.1.0](https://github.com/knisterpeter/pretend/compare/v0.0.3...v0.1.0) (2016-03-19)
+
+
+### Features
+
+* Add builder option to configure a decoder ([2071465](https://github.com/knisterpeter/pretend/commit/2071465))
+
+
+
 <a name="0.0.3"></a>
 ## [0.0.3](https://github.com/knisterpeter/pretend/compare/v0.0.2...v0.0.3) (2016-03-13)
 
