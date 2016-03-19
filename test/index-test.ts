@@ -1,5 +1,6 @@
 import { assert } from 'chai';
 import * as nock from 'nock';
+import { Response } from 'isomorphic-fetch';
 
 import { Pretend, Get, Post, Put, Delete } from '../src';
 
@@ -20,7 +21,7 @@ const response = {
   key: 'value'
 };
 
-describe('RestJs', () => {
+describe('Pretend', () => {
   let test: Test;
 
   beforeEach(() => {
@@ -56,5 +57,27 @@ describe('RestJs', () => {
     } catch (e) {
       // Ignore here
     }
+  });
+
+  it('should return content based on decoder configuration', async () => {
+    /* tslint:disable */
+    class Api {
+      @Get('/path')
+      async get(): Promise<string> { return undefined };
+    }
+    /* tslint:enable */
+    nock('http://host:port/').get('/path').reply(200, 'some-string');
+    let decoderCalled = false;
+    const api = Pretend.builder()
+      .decode((res: Response) => {
+        decoderCalled = true;
+        return res.text();
+      })
+      .target(Api, 'http://host:port/');
+
+    const text = await api.get();
+
+    assert.isTrue(decoderCalled, 'The decoder should be called');
+    assert.equal(text, 'some-string');
   });
 });

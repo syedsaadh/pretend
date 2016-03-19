@@ -1,5 +1,6 @@
 {
   "rules": {
+    "max-line-length": [true, 120],
     "class-name": true,
     "comment-format": [
       true,
@@ -52,7 +53,7 @@
       "avoid-escape"
     ],
     "radix": true,
-    "semicolon": true,
+    "semicolon": [true, "always"],
     "typedef": [
       true,
       "call-signature",

@@ -12,7 +12,8 @@ A decorator based http webservice client build with typescript (inspired bei fei
 
 # Features
 
-* Handle JSON based webservices
+* Handle REST based webservices
+* Configure a decoder (defaults to JSON)
 
 # Usage
 
@@ -59,8 +60,14 @@ call();
 
 ```
 
+```js
+  // Configure a text based decoder
+  const client = Pretend
+                  .builder()
+                  .decoder(Pretend.TextDecoder)
+                  .target(Test, 'http://host:port/');
+```
+
 ## Future ideas / Roadmap
 
-* More content types
 * Named parameters
-
