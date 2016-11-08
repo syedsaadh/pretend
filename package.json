@@ -15,15 +15,13 @@
     "build": "tsc --sourceMap",
     "pretest": "npm run build",
     "test": "mocha --require source-map-support/register --recursive dist/test",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w",
-    "preversion": "npm test",
-    "version": "npm run build && conventional-changelog -p angular -v -r 0 > CHANGELOG.md && git add -A .",
-    "postversion": "git push && git push --tags",
-    "prepublish": "not-in-install && npm run build || echo 'In install cycle, skipping prepublish'",
     "precoverage": "npm run clean && tsc --inlineSourceMap",
     "coverage": "nyc --reporter lcov ./node_modules/.bin/mocha --recursive dist/test --all",
     "watch:build": "tsc --watch --sourceMap",
-    "watch:test": "mocha --watch --recursive dist/test"
+    "watch:test": "mocha --watch --recursive dist/test",
+    "prerelease": "npm test && npm run build",
+    "release": "standard-version",
+    "postrelease": "git push --follow-tags origin master && npm publish"
   },
   "repository": {
     "type": "git",
@@ -44,6 +42,7 @@
     "nyc": "8.4.0",
     "rimraf": "2.5.4",
     "source-map-support": "0.4.6",
+    "standard-version": "3.0.0",
     "tslint": "3.15.1",
     "typescript": "2.0.7"
   },
