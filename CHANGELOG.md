@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/knisterpeter/pretend/compare/v0.2.3...v0.3.0) (2016-11-08)
+
+
+### Features
+
+* allow colon as parameter indicator (#81) ([32b32ea](https://github.com/knisterpeter/pretend/commit/32b32ea))
+* allow request parameters (#82) ([9abf823](https://github.com/knisterpeter/pretend/commit/9abf823))
+
+
+
 <a name="0.2.3"></a>
 ## [0.2.3](https://github.com/knisterpeter/pretend/compare/v0.2.2...v0.2.3) (2016-11-08)
 
