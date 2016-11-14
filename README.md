@@ -91,7 +91,7 @@ of the more generic interceptors which could be chained per request/response.
                   .target(Test, 'http://host:port/');
 ```
 
-#### interceptors
+#### Interceptors
 
 Multiple interceptors could be added to each builder. The order of interceptor
 calls will result in a chain of calls like illistrated below:
