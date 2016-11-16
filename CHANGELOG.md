@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/knisterpeter/pretend/compare/v0.4.0...v0.5.0) (2016-11-16)
+
+
+### Features
+
+* add headers decorator (#89) ([1ea25f0](https://github.com/knisterpeter/pretend/commit/1ea25f0))
+
+
+
 <a name="0.4.0"></a>
 # [0.4.0](https://github.com/knisterpeter/pretend/compare/v0.3.0...v0.4.0) (2016-11-14)
 
