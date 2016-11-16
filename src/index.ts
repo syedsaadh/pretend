@@ -1,6 +1,8 @@
 import fetch from 'omni-fetch';
 import 'isomorphic-fetch';
 
+export {Get, Post, Put, Delete, Headers} from './decorators';
+
 export type IPretendDecoder = (response: Response) => Promise<any>;
 export type IPretendRequest = { url: string, options: RequestInit };
 export type IPretendRequestInterceptor = (request: IPretendRequest) => IPretendRequest;
@@ -17,6 +19,9 @@ interface Instance {
   __Pretend__: {
     baseUrl: string;
     interceptors: Interceptor[];
+    perRequest?: {
+      headers?: {[name: string]: string[]};
+    };
   };
 }
 
@@ -37,11 +42,22 @@ function createQuery(parameters: any): string {
 }
 
 function buildUrl(tmpl: string, args: any[], appendQuery: boolean): [string, number] {
-  const createUrlResult = createUrl(tmpl, args);
-  const url = createUrlResult[0];
-  const queryOrBodyIndex = createUrlResult[1];
+  const [url, queryOrBodyIndex] = createUrl(tmpl, args);
   const query = createQuery(appendQuery ? args[queryOrBodyIndex] : {});
   return [`${url}${query}`, queryOrBodyIndex];
+}
+
+function prepareHeaders(instance: Instance): Headers {
+  const headers = new Headers();
+  const {perRequest} = instance.__Pretend__;
+  if (perRequest && perRequest.headers) {
+    Object.keys(perRequest.headers).forEach(name => {
+      perRequest.headers![name].forEach(value => {
+        headers.append(name, value);
+      });
+    });
+  }
+  return headers;
 }
 
 function chainFactory(interceptors: Interceptor[]): (request: IPretendRequest) => Promise<Response> {
@@ -56,6 +72,7 @@ function execute(instance: Instance, method: string, tmpl: string, args: any[], 
   const createUrlResult = buildUrl(tmpl, args, appendQuery);
   const url = createUrlResult[0];
   const queryOrBodyIndex = createUrlResult[1];
+  const headers = prepareHeaders(instance);
   const body = sendBody ? JSON.stringify(args[appendQuery ? queryOrBodyIndex + 1 : queryOrBodyIndex]) : undefined;
 
   const chain = chainFactory(instance.__Pretend__.interceptors);
@@ -63,17 +80,58 @@ function execute(instance: Instance, method: string, tmpl: string, args: any[], 
     url,
     options: {
       method,
-      headers: {},
+      headers,
       body
     }
   });
 }
 
-function decoratorFactory(method: string, url: string, sendBody: boolean, appendQuery: boolean): MethodDecorator {
-  return (target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => {
-    descriptor.value = async function(this: Instance): Promise<any> {
-      return execute(this, method, `${this.__Pretend__.baseUrl}${url}`,
-        Array.prototype.slice.call(arguments), sendBody, appendQuery);
+/**
+ * @internal
+ */
+export function methodDecoratorFactory(method: string, url: string, sendBody: boolean,
+    appendQuery: boolean): MethodDecorator {
+  return (_target: Object, _propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => {
+    descriptor.value = function(this: Instance, ...args: any[]): Promise<any> {
+      return execute(this, method, `${this.__Pretend__.baseUrl}${url}`, args, sendBody, appendQuery);
+    };
+    return descriptor;
+  };
+}
+
+/**
+ * @internal
+ */
+export function headerDecoratorFactory(headers: string|string[]): MethodDecorator {
+  return (_target: Object, _propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => {
+    const originalFunction: (...args: any[]) => Promise<any> = descriptor.value;
+    descriptor.value = function(this: Instance, ...args: any[]): Promise<any> {
+      return Promise.resolve()
+        .then(() => {
+          this.__Pretend__.perRequest = {
+            headers: (Array.isArray(headers) ? headers : [headers]).reduce((akku, header) => {
+              const match = header.match(/([^:]+): *(.*)/);
+              if (!match) {
+                throw new Error(`Invalid header format for '${header}'`);
+              }
+              const [, name, value] = match;
+              if (!akku[name]) {
+                akku[name] = [];
+              }
+              akku[name].push(value);
+              return akku;
+            }, {} as {[name: string]: string[]})
+          };
+          return (originalFunction.apply(this, args) as Promise<any>)
+            .then(result => {
+              this.__Pretend__.perRequest = undefined;
+              return result;
+            })
+            .catch(error => {
+              this.__Pretend__.perRequest = undefined;
+              throw error;
+            });
+        });
     };
     return descriptor;
   };
@@ -85,7 +143,7 @@ export class Pretend {
   private decoder: IPretendDecoder = Pretend.JsonDecoder;
 
   private static FetchInterceptor: Interceptor =
-    async (chain: Chain, request: IPretendRequest) => fetch(request.url, request.options);
+    (_chain: Chain, request: IPretendRequest) => fetch(request.url, request.options);
   public static JsonDecoder: IPretendDecoder = (response: Response) => response.json();
   public static TextDecoder: IPretendDecoder = (response: Response) => response.text();
 
@@ -108,11 +166,11 @@ export class Pretend {
   public basicAuthentication(username: string, password: string): this {
     const usernameAndPassword = `${username}:${password}`;
     const auth = 'Basic '
-      + (typeof btoa !== 'undefined'
-        ? btoa(usernameAndPassword)
+      + (typeof (global as any).btoa !== 'undefined'
+        ? (global as any).btoa(usernameAndPassword)
         : new Buffer(usernameAndPassword, 'binary').toString('base64'));
     this.requestInterceptor((request) => {
-      (request.options.headers as any)['Authorization'] = auth;
+      (request.options.headers as Headers).set('Authorization', auth);
       return request;
     });
     return this;
@@ -126,9 +184,8 @@ export class Pretend {
   public target<T>(descriptor: {new(): T}, baseUrl: string): T {
     if (this.decoder) {
       // If we have a decoder, the first thing to do with a response is to decode it
-      this.interceptors.push(async (chain: Chain, request: IPretendRequest) => {
-        const response = await chain(request);
-        return this.decoder(response);
+      this.interceptors.push((chain: Chain, request: IPretendRequest) => {
+        return chain(request).then(response => this.decoder(response));
       });
     }
     // This is the end of the request chain
@@ -142,23 +199,4 @@ export class Pretend {
     return instance;
   }
 
-}
-
-export function Get(url: string, appendQuery?: boolean): MethodDecorator {
-  if (typeof appendQuery === 'undefined') {
-    appendQuery = false;
-  }
-  return decoratorFactory('GET', url, false, appendQuery);
-}
-
-export function Post(url: string): MethodDecorator {
-  return decoratorFactory('POST', url, true, false);
-}
-
-export function Put(url: string): MethodDecorator {
-  return decoratorFactory('PUT', url, true, false);
-}
-
-export function Delete(url: string): MethodDecorator {
-  return decoratorFactory('DELETE', url, false, false);
 }
