@@ -19,6 +19,10 @@ export function Delete(url: string, sendBody = false): MethodDecorator {
   return methodDecoratorFactory('DELETE', url, sendBody, false);
 }
 
+export function Patch(url: string): MethodDecorator {
+  return methodDecoratorFactory('PATCH', url, true, false);
+}
+
 export function Headers(headers: string|string[]): MethodDecorator {
   return headerDecoratorFactory(headers);
 }
