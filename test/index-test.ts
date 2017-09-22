@@ -1,7 +1,7 @@
 import test from 'ava';
 import * as nock from 'nock';
 
-import { Delete, Get, Headers, Post, Pretend, Put } from '../src';
+import { Delete, Get, Headers, Post, Pretend, Put, Patch } from '../src';
 
 interface Test {
   get(_id: string): Promise<any>;
@@ -11,6 +11,7 @@ interface Test {
   put(): Promise<any>;
   delete(_id: string): Promise<any>;
   deleteBody(_id: string, _body: object): Promise<any>;
+  patchBody(_id: string, _body: object): Promise<any>;
 }
 
 class TestImpl implements Test {
@@ -29,6 +30,8 @@ class TestImpl implements Test {
   public delete(_id: string): any { /* */ }
   @Delete('/path/:id', true)
   public deleteBody(_id: string, _body: object): any { /* */ }
+  @Patch('/path/:id')
+  public patchBody(_id: string, _body: object): any { /* */ }
 }
 
 const mockResponse = {
@@ -133,6 +136,15 @@ test('Pretend should call a delete method and send a body', t => {
   const test = setup();
   nock('http://host:port/').delete('/path/id', {data: 'data'}).reply(200, mockResponse);
   return test.deleteBody('id', {data: 'data'})
+    .then(response => {
+      t.deepEqual(response, mockResponse);
+    });
+});
+
+test('Pretend should call a patch method and send a body', t => {
+  const test = setup();
+  nock('http://host:port/').patch('/path/id', {data: 'data'}).reply(200, mockResponse);
+  return test.patchBody('id', {data: 'data'})
     .then(response => {
       t.deepEqual(response, mockResponse);
     });
