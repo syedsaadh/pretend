@@ -37,7 +37,7 @@
     "ava": "^0.22.0",
     "coveralls": "^3.0.0",
     "cz-conventional-changelog": "^2.0.0",
-    "nock": "^9.0.9",
+    "nock": "^9.0.22",
     "nyc": "^11.0.2",
     "rimraf": "^2.6.1",
     "source-map-support": "~0.4.10",
