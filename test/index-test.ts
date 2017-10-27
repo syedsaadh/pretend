@@ -1,4 +1,5 @@
 import test from 'ava';
+import 'isomorphic-fetch';
 import * as nock from 'nock';
 
 import { Delete, Get, Headers, Post, Pretend, Put, Patch } from '../src';

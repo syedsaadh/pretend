@@ -1,5 +1,3 @@
-import 'isomorphic-fetch';
-
 export {Get, Post, Put, Delete, Headers, Patch} from './decorators';
 
 export type IPretendDecoder = (response: Response) => Promise<any>;
