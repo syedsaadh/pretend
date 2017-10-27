@@ -29,6 +29,8 @@ Install as npm package:
 npm install pretend --save
 ```
 
+**Note:** To work on node.js (server-side) the `fetch` must be polyfilled. This could easy be done importing `isomorphic-fetch`.
+
 ### API
 
 ```js
