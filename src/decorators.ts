@@ -7,8 +7,8 @@ export function Get(url: string, appendQuery?: boolean): MethodDecorator {
   return methodDecoratorFactory('GET', url, false, appendQuery);
 }
 
-export function Post(url: string): MethodDecorator {
-  return methodDecoratorFactory('POST', url, true, false);
+export function Post(url: string, appendQuery = false): MethodDecorator {
+  return methodDecoratorFactory('POST', url, true, appendQuery);
 }
 
 export function Put(url: string): MethodDecorator {

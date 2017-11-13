@@ -1,20 +1,19 @@
 {
-  // See https://go.microsoft.com/fwlink/?LinkId=733558
-  // for the documentation about the tasks.json format
-  "version": "0.1.0",
-  "command": "npm",
-  "isShellCommand": true,
-  "showOutput": "silent",
-  "suppressTaskName": true,
-  "tasks": [
-    {
-      "taskName": "build",
-      "args": [
-        "run",
-        "watch:build"
-      ],
-      "isBuildCommand": true,
-      "isWatching": true
-    }
-  ]
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "npm",
+            "script": "watch:build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$tsc-watch",
+                "$tslint5"
+            ]
+        }
+    ]
 }
