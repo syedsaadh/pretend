@@ -9,6 +9,7 @@ interface Test {
   getWithQuery(_id: string, _parameters: any): Promise<any>;
   getWithHeader(): Promise<any>;
   post(_body: any): Promise<any>;
+  postWithQueryAndBody(_query: any, _body: any): Promise<any>;
   put(): Promise<any>;
   delete(_id: string): Promise<any>;
   deleteBody(_id: string, _body: object): Promise<any>;
@@ -25,6 +26,8 @@ class TestImpl implements Test {
   public getWithHeader(): any { /* */ }
   @Post('/path')
   public post(_body: any): any { /* */ }
+  @Post('/path', true)
+  public postWithQueryAndBody(): any { /* */ }
   @Put('/path')
   public put(): any { /* */ }
   @Delete('/path/:id')
@@ -98,6 +101,15 @@ test('Pretend should call a post method', t => {
   const test = setup();
   nock('http://host:port/').post('/path', {mockResponse}).reply(200, mockResponse);
   return test.post({mockResponse})
+    .then(response => {
+      t.deepEqual(response, mockResponse);
+    });
+});
+
+test('Pretend should call a post method with query and body', t => {
+  const test = setup();
+  nock('http://host:port/').post('/path?query=param', {mockResponse}).reply(200, mockResponse);
+  return test.postWithQueryAndBody({ query: 'param' }, {mockResponse})
     .then(response => {
       t.deepEqual(response, mockResponse);
     });
