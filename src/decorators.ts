@@ -11,8 +11,8 @@ export function Post(url: string, appendQuery = false): MethodDecorator {
   return methodDecoratorFactory('POST', url, true, appendQuery);
 }
 
-export function Put(url: string): MethodDecorator {
-  return methodDecoratorFactory('PUT', url, true, false);
+export function Put(url: string, appendQuery = false): MethodDecorator {
+  return methodDecoratorFactory('PUT', url, true, appendQuery);
 }
 
 export function Delete(url: string, sendBody = false): MethodDecorator {

@@ -11,6 +11,7 @@ interface Test {
   post(_body: any): Promise<any>;
   postWithQueryAndBody(_query: any, _body: any): Promise<any>;
   put(): Promise<any>;
+  putWithQuery(_parameters: any): Promise<any>;
   delete(_id: string): Promise<any>;
   deleteBody(_id: string, _body: object): Promise<any>;
   patchBody(_id: string, _body: object): Promise<any>;
@@ -30,6 +31,8 @@ class TestImpl implements Test {
   public postWithQueryAndBody(): any { /* */ }
   @Put('/path')
   public put(): any { /* */ }
+  @Put('/path', true)
+  public putWithQuery(_parameters: any): any { /* */ }
   @Delete('/path/:id')
   public delete(_id: string): any { /* */ }
   @Delete('/path/:id', true)
@@ -119,6 +122,15 @@ test('Pretend should call a put method', t => {
   const test: Test = Pretend.builder().target(TestImpl, 'http://host:port');
   nock('http://host:port/').put('/path').reply(200, mockResponse);
   return test.put()
+    .then(response => {
+      t.deepEqual(response, mockResponse);
+    });
+});
+
+test('Pretend should call a put method with query parameters', t => {
+  const test = setup();
+  nock('http://host:port/').put('/path?query=param').reply(200, mockResponse);
+  return test.putWithQuery({query: 'param'})
     .then(response => {
       t.deepEqual(response, mockResponse);
     });
