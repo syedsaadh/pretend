@@ -30,10 +30,7 @@ function createUrl(url: string, args: any[]): [string, number] {
     .join('/'), args.length === 0 ? -1 : i];
 }
 
-function createQuery(parameters: any): string {
-  if (!parameters) {
-    return '';
-  }
+function createQuery(parameters: object): string {
   return Object.keys(parameters)
     .reduce((query, name) => {
       return `${query}&${name}=${encodeURIComponent(parameters[name])}`;
