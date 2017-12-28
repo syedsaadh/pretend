@@ -5,6 +5,7 @@ import * as nock from 'nock';
 import { Delete, Get, Headers, Post, Pretend, Put, Patch } from '../src';
 
 interface Test {
+  getSimple(): Promise<any>;
   get(_id: string): Promise<any>;
   getWithQuery(_id: string, _parameters: any): Promise<any>;
   getWithHeader(): Promise<any>;
@@ -18,6 +19,8 @@ interface Test {
 }
 
 class TestImpl implements Test {
+  @Get('/path', true)
+  public getSimple(): any { /* */ }
   @Get('/path/{id}')
   public get(_id: string): any { /* */ }
   @Get('/path/{id}', true)
@@ -48,6 +51,15 @@ const mockResponse = {
 function setup(): Test {
   return Pretend.builder().target(TestImpl, 'http://host:port/');
 }
+
+test('Pretend should call a get method without any parameter or query', t => {
+  const test = setup();
+  nock('http://host:port/').get('/path').reply(200, mockResponse);
+  return test.getSimple()
+    .then(response => {
+      t.deepEqual(response, mockResponse);
+    });
+});
 
 test('Pretend should call a get method', t => {
   const test = setup();
