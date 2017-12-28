@@ -27,10 +27,13 @@ function createUrl(url: string, args: any[]): [string, number] {
   return [url
     .split('/')
     .map(part => (part.startsWith(':') || part.startsWith('{')) && i <= args.length ? args[i++] : part)
-    .join('/'), i];
+    .join('/'), args.length === 0 ? -1 : i];
 }
 
 function createQuery(parameters: any): string {
+  if (!parameters) {
+    return '';
+  }
   return Object.keys(parameters)
     .reduce((query, name) => {
       return `${query}&${name}=${encodeURIComponent(parameters[name])}`;
@@ -40,7 +43,7 @@ function createQuery(parameters: any): string {
 
 function buildUrl(tmpl: string, args: any[], appendQuery: boolean): [string, number] {
   const [url, queryOrBodyIndex] = createUrl(tmpl, args);
-  const query = createQuery(appendQuery ? args[queryOrBodyIndex] : {});
+  const query = createQuery(appendQuery && queryOrBodyIndex > -1 ? args[queryOrBodyIndex] : {});
   return [`${url}${query}`, queryOrBodyIndex];
 }
 
