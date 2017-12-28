@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/KnisterPeter/pretend/compare/v1.2.0...v1.2.1) (2017-12-28)
+
+
+### Bug Fixes
+
+* accessing undefined value ([1987162](https://github.com/KnisterPeter/pretend/commit/1987162))
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/KnisterPeter/pretend/compare/v1.1.0...v1.2.0) (2017-12-15)
 
