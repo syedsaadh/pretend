@@ -10,6 +10,12 @@
                 "kind": "build",
                 "isDefault": true
             },
+            "presentation": {
+              "echo": true,
+              "reveal": "silent",
+              "focus": false,
+              "panel": "shared"
+            },
             "problemMatcher": [
                 "$tsc-watch",
                 "$tslint5"

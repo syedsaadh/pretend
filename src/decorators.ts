@@ -15,8 +15,8 @@ export function Put(url: string, appendQuery = false): MethodDecorator {
   return methodDecoratorFactory('PUT', url, true, appendQuery);
 }
 
-export function Delete(url: string, sendBody = false): MethodDecorator {
-  return methodDecoratorFactory('DELETE', url, sendBody, false);
+export function Delete(url: string, sendBody = false, appendQuery = false): MethodDecorator {
+  return methodDecoratorFactory('DELETE', url, sendBody, appendQuery);
 }
 
 export function Patch(url: string): MethodDecorator {
