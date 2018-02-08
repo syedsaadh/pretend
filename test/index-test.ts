@@ -15,6 +15,7 @@ interface Test {
   putWithQuery(_parameters: any): Promise<any>;
   delete(_id: string): Promise<any>;
   deleteBody(_id: string, _body: object): Promise<any>;
+  deleteWithQuery(_id: string, _query: object): Promise<any>;
   patchBody(_id: string, _body: object): Promise<any>;
 }
 
@@ -40,6 +41,8 @@ class TestImpl implements Test {
   public delete(_id: string): any { /* */ }
   @Delete('/path/:id', true)
   public deleteBody(_id: string, _body: object): any { /* */ }
+  @Delete('/path/:id', false, true)
+  public deleteWithQuery(_id: string, _query: object): any { /* */ }
   @Patch('/path/:id')
   public patchBody(_id: string, _body: object): any { /* */ }
 }
@@ -173,6 +176,15 @@ test('Pretend should call a delete method and send a body', t => {
   const test = setup();
   nock('http://host:port/').delete('/path/id', {data: 'data'}).reply(200, mockResponse);
   return test.deleteBody('id', {data: 'data'})
+    .then(response => {
+      t.deepEqual(response, mockResponse);
+    });
+});
+
+test('Pretend should call a delete method and append query parameters', t => {
+  const test = setup();
+  nock('http://host:port/').delete('/path/id?param=value').reply(200, mockResponse);
+  return test.deleteWithQuery('id', {param: 'value'})
     .then(response => {
       t.deepEqual(response, mockResponse);
     });

@@ -15,7 +15,8 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noUnusedLocals": true,
+    // note: enable again when https://github.com/Microsoft/TypeScript/issues/21533 is released
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
     "outDir": "dist",
     "pretty": true,
