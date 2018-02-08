@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/KnisterPeter/pretend/compare/v1.2.1...v1.3.0) (2018-02-08)
+
+
+### Features
+
+* allow delete request with query parameters ([b6a88c6](https://github.com/KnisterPeter/pretend/commit/b6a88c6))
+
+
+
 <a name="1.2.1"></a>
 ## [1.2.1](https://github.com/KnisterPeter/pretend/compare/v1.2.0...v1.2.1) (2017-12-28)
 
