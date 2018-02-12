@@ -146,8 +146,7 @@ test('Pretend should call a post method with FormData', t => {
     })
     .post('/path/withFormData', /Content-Disposition: form-data; name="name"/)
     .reply(200, mockResponse);
-  const buf = new Buffer(10);
-  return test.postWithFormData(buf)
+  return test.postWithFormData(new Buffer(10).toString('UTF-8'))
     .then(response => {
       t.deepEqual(response, mockResponse);
     });
