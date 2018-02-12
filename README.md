@@ -43,6 +43,9 @@ class Test {
   @Post('/path')
   public async post(body: any) {}
 
+  @Post('/path')
+  public async post(@FormData('name') blob: any) {}
+
   @Put('/path')
   public async put() {}
 
