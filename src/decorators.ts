@@ -1,4 +1,4 @@
-import {headerDecoratorFactory, methodDecoratorFactory} from './index';
+import { headerDecoratorFactory, methodDecoratorFactory } from './index';
 
 export function Get(url: string, appendQuery?: boolean): MethodDecorator {
   if (typeof appendQuery === 'undefined') {
@@ -25,4 +25,23 @@ export function Patch(url: string): MethodDecorator {
 
 export function Headers(headers: string|string[]): MethodDecorator {
   return headerDecoratorFactory(headers);
+}
+
+export function FormData(name: string): ParameterDecorator {
+  return (target: any, property: string | symbol, parameter: number) => {
+    if (!target.__pretend_parameter__) {
+      Object.defineProperty(target, '__pretend_parameter__', {
+        enumerable: false,
+        value: {}
+      });
+      if (!target.__pretend_parameter__[property]) {
+        target.__pretend_parameter__[property] = [];
+      }
+      target.__pretend_parameter__[property].push({
+        type: 'FormData',
+        name,
+        parameter
+      });
+    }
+  };
 }

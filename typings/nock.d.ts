@@ -1,5 +1,6 @@
 declare module 'nock' {
   interface Nock {
+    log(logger: Console['log']): this;
     get(path: string): this;
     post(path: string, body?: any): this;
     put(path: string): this;
@@ -13,7 +14,7 @@ declare module 'nock' {
   interface NockFunction {
     (baseUrl: string, options ?: {
       reqheaders?: {
-        [name: string]: string;
+        [name: string]: string | RegExp;
       }
     }): Nock;
   }

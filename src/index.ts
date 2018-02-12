@@ -1,4 +1,4 @@
-export {Get, Post, Put, Delete, Headers, Patch} from './decorators';
+export {Get, Post, Put, Delete, Headers, Patch, FormData} from './decorators';
 
 export type IPretendDecoder = (response: Response) => Promise<any>;
 export type IPretendRequest = { url: string, options: RequestInit };
@@ -19,7 +19,16 @@ interface Instance {
     perRequest?: {
       headers?: {[name: string]: string[]};
     };
+    parameters: {
+      [method: string]: FormDataParameter[]
+    }
   };
+}
+
+interface FormDataParameter {
+  type: 'FormData';
+  name: string;
+  parameter: number;
 }
 
 function createUrl(url: string, args: any[]): [string, number] {
@@ -65,12 +74,24 @@ function chainFactory(interceptors: Interceptor[]): (request: IPretendRequest) =
 }
 
 function execute(instance: Instance, method: string, tmpl: string, args: any[], sendBody: boolean,
-    appendQuery: boolean): Promise<any> {
-  const createUrlResult = buildUrl(tmpl, args, appendQuery);
+    appendQuery: boolean, parameters?: FormDataParameter[]): Promise<any> {
+  const createBody = () => {
+    if (parameters) {
+      const formData = new FormData();
+      parameters.forEach(parameter => {
+        const value = args[parameter.parameter];
+        formData.append(parameter.name, value, value.name);
+      });
+      return formData;
+    }
+    return sendBody ? JSON.stringify(args[appendQuery ? queryOrBodyIndex + 1 : queryOrBodyIndex]) : undefined;
+  };
+
+  const createUrlResult = buildUrl(tmpl, args, appendQuery && !parameters);
   const url = createUrlResult[0];
   const queryOrBodyIndex = createUrlResult[1];
   const headers = prepareHeaders(instance);
-  const body = sendBody ? JSON.stringify(args[appendQuery ? queryOrBodyIndex + 1 : queryOrBodyIndex]) : undefined;
+  const body = createBody();
 
   const chain = chainFactory(instance.__Pretend__.interceptors);
   return chain({
@@ -88,9 +109,17 @@ function execute(instance: Instance, method: string, tmpl: string, args: any[], 
  */
 export function methodDecoratorFactory(method: string, url: string, sendBody: boolean,
     appendQuery: boolean): MethodDecorator {
-  return (_target: Object, _propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => {
+  return (_target: Object, property: string, descriptor: TypedPropertyDescriptor<any>) => {
     descriptor.value = function(this: Instance, ...args: any[]): Promise<any> {
-      return execute(this, method, `${this.__Pretend__.baseUrl}${url}`, args, sendBody, appendQuery);
+      return execute(
+        this,
+        method,
+        `${this.__Pretend__.baseUrl}${url}`,
+        args,
+        sendBody,
+        appendQuery,
+        (this.__Pretend__.parameters || {})[property]
+      );
     };
     return descriptor;
   };
@@ -192,7 +221,8 @@ export class Pretend {
     const instance = new descriptor() as T & Instance;
     instance.__Pretend__ = {
       baseUrl: baseUrl.endsWith('/') ? baseUrl.substring(0, baseUrl.length - 1) : baseUrl,
-      interceptors: this.interceptors
+      interceptors: this.interceptors,
+      parameters: descriptor.prototype.__pretend_parameter__
     };
     return instance;
   }
