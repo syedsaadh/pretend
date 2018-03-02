@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.4.1"></a>
+## [1.4.1](https://github.com/KnisterPeter/pretend/compare/v1.4.0...v1.4.1) (2018-03-02)
+
+
+### Bug Fixes
+
+* allow multiple formdata decorators per target ([0c8db05](https://github.com/KnisterPeter/pretend/commit/0c8db05))
+
+
+
 <a name="1.4.0"></a>
 # [1.4.0](https://github.com/KnisterPeter/pretend/compare/v1.3.0...v1.4.0) (2018-02-12)
 
