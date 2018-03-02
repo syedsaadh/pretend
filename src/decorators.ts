@@ -34,14 +34,14 @@ export function FormData(name: string): ParameterDecorator {
         enumerable: false,
         value: {}
       });
-      if (!target.__pretend_parameter__[property]) {
-        target.__pretend_parameter__[property] = [];
-      }
-      target.__pretend_parameter__[property].push({
-        type: 'FormData',
-        name,
-        parameter
-      });
     }
+    if (!target.__pretend_parameter__[property]) {
+      target.__pretend_parameter__[property] = [];
+    }
+    target.__pretend_parameter__[property].push({
+      type: 'FormData',
+      name,
+      parameter
+    });
   };
 }
