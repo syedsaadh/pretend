@@ -1,6 +1,6 @@
 {
   "name": "pretend",
-  "version": "1.5.1",
+  "version": "2.0.0",
   "description": "A decorator based http webservice client written in typescript",
   "main": "dist/src/index.js",
   "files": [

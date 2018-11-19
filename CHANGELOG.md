@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/KnisterPeter/pretend/compare/v1.5.1...v2.0.0) (2018-11-19)
+
+
+### Features
+
+* allow form encoding of body data ([8b7acb1](https://github.com/KnisterPeter/pretend/commit/8b7acb1))
+* drop node 4 support ([51735b2](https://github.com/KnisterPeter/pretend/commit/51735b2))
+
+
+### BREAKING CHANGES
+
+* drop node 4 support
+
+
+
 <a name="1.5.1"></a>
 ## [1.5.1](https://github.com/KnisterPeter/pretend/compare/v1.5.0...v1.5.1) (2018-05-24)
 
