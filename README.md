@@ -2,8 +2,7 @@
 
 [![GitHub license](https://img.shields.io/github/license/KnisterPeter/pretend.svg)](https://github.com/KnisterPeter/pretend)
 [![Travis](https://img.shields.io/travis/KnisterPeter/pretend.svg)](https://travis-ci.org/KnisterPeter/pretend)
-[![Coverage Status](https://coveralls.io/repos/github/KnisterPeter/pretend/badge.svg?branch=master)](https://coveralls.io/github/KnisterPeter/pretend?branch=master)
-[![npm](https://img.shields.io/npm/v/pretend.svg)](https://www.npmjs.com/package/pretend)
+[![codecov](https://codecov.io/gh/KnisterPeter/pretend/branch/master/graph/badge.svg)](https://codecov.io/gh/KnisterPeter/pretend)[![npm](https://img.shields.io/npm/v/pretend.svg)](https://www.npmjs.com/package/pretend)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
 [![renovate badge](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovateapp.com/)
